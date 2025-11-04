@@ -1,168 +1,246 @@
-# Lab 1 — Installation and Configuration of Ansible
+# Lab 1: Installing and Configuring Ansible
 
 ## Objective
-- Install and configure an Ansible control node on a RHEL 9 EC2 instance.
-- Configure AWS CLI and the Ansible Amazon collection so you can manage cloud resources.
+Learn to install Ansible on a control node, configure inventory, and establish connectivity with managed nodes.
 
 ## Prerequisites
-- An AWS account and a keypair to SSH into EC2 instances.
-- Basic familiarity with Linux commands and SSH.
-- A local terminal with network access to your EC2 instances.
+- AWS EC2 instances (1 control node + 2 managed nodes)
+- SSH access to all instances
+- Basic Linux command knowledge
 
-## Estimated time
-~ 30–45 minutes
+## Lab Steps
 
----
+### Step 1: Launch EC2 Instances
 
-## Overview
-This lab shows how to launch a RHEL 9 instance to act as the Ansible control node, install required packages (Python, pip, awscli, boto3 and Ansible), configure AWS credentials, and prepare a simple Ansible inventory for managing hosts.
+Launch 3 EC2 instances with the following specifications:
+- **AMI**: Amazon Linux 2 or RHEL 8
+- **Instance Type**: t2.micro (free tier eligible)
+- **Security Group**: Allow SSH (port 22) from your IP
+- **Key Pair**: Create or use existing key pair
 
-> Note: Do NOT paste real AWS secret keys into shared documents. Use `aws configure` on your control node and keep credentials private.
+Name the instances:
+- `ansible-control` (control node)
+- `ansible-node1` (managed node 1)
+- `ansible-node2` (managed node 2)
 
----
+### Step 2: Connect to Control Node
 
-## Steps
-
-1. Launch an EC2 instance
-
-- Region: us-east-1 (or your preferred region)
-- AMI: RHEL 9
-- Instance type: t2.micro (or equivalent)
-- Security group: allow SSH (22) from your IP and HTTP (80) if you plan to run a web server
-- Add a tag like Name=Ansible-ControlNode
-
-2. SSH to the control node and set a hostname (optional)
-
+Connect to the control node:
 ```bash
-# from your local shell
-ssh -i /path/to/your-key.pem ec2-user@<control-node-ip>
-
-# on the instance
-sudo hostnamectl set-hostname Control-Node
+ssh -i your-key.pem ec2-user@control-node-ip
 ```
 
-You can open a new shell to observe the changed hostname.
-
-3. Update packages
-
+Update the system:
 ```bash
-sudo yum check-update
+sudo yum update -y
 ```
 
-4. Install Python3 and pip (required by Ansible)
+### Step 3: Install Ansible on Control Node
 
+Install EPEL repository:
 ```bash
-sudo yum install python3-pip -y
-python3 --version
-sudo pip3 install --upgrade pip
+sudo yum install -y epel-release
 ```
 
-5. Install awscli, boto, boto3 and Ansible
-
-These packages let Ansible interact with AWS (boto/boto3) and run playbooks.
-
+Install Ansible:
 ```bash
-sudo pip3 install awscli boto boto3
-sudo pip3 install "ansible==8.5.0"
+sudo yum install -y ansible
+```
 
-# Verify installation
-pip show ansible
+Verify Ansible installation:
+```bash
 ansible --version
 ```
 
-6. Install the AWS Ansible collection
-
+Check Ansible configuration:
 ```bash
-ansible-galaxy collection install amazon.aws --upgrade
+ansible-config view
 ```
 
-7. Configure your AWS credentials (on the control node)
+### Step 4: Configure SSH Key-Based Authentication
 
+Generate SSH key pair on control node:
 ```bash
-aws configure
+ssh-keygen -t rsa -b 2048
 ```
 
-When prompted, enter your Access Key ID and Secret Access Key. Keep these credentials private. If you need to automate credential management, consider using environment variables or IAM roles instead of storing long-lived credentials on disk.
+Press Enter for all prompts to use defaults.
 
-8. Install wget (optional, used for downloading example playbooks)
-
+Copy SSH public key to managed nodes:
 ```bash
-sudo yum install wget -y
+ssh-copy-id ec2-user@node1-private-ip
+```
+```bash
+ssh-copy-id ec2-user@node2-private-ip
 ```
 
-9. (Optional) Download and run an example playbook provided by the trainer
-
+Test SSH connectivity:
 ```bash
-wget https://devops-code-sruti.s3.us-east-1.amazonaws.com/ansible_script.yaml
-ansible-playbook ansible_script.yaml
+ssh ec2-user@node1-private-ip
+```
+```bash
+exit
+```
+```bash
+ssh ec2-user@node2-private-ip
+```
+```bash
+exit
 ```
 
-10. Prepare the Ansible inventory
+### Step 5: Create and Configure Inventory File
 
-Edit `/etc/ansible/hosts` and add the private IPs of managed nodes. Press `INSERT` in `vi` to edit and then `ESCAPE` + `:wq` to save.
-
-```text
-node1 ansible_ssh_host=<node1-private-ip> ansible_ssh_user=ec2-user
-node2 ansible_ssh_host=<node2-private-ip> ansible_ssh_user=ec2-user
+Create inventory directory:
+```bash
+sudo mkdir -p /etc/ansible
 ```
 
-Replace `<node1-private-ip>` and `<node2-private-ip>` with the actual private IP addresses (no angle brackets in the file).
-
-11. Verify Ansible can see hosts
-
+Edit the main inventory file:
 ```bash
-ansible all --list-hosts
+sudo vi /etc/ansible/hosts
+```
+
+Add your managed nodes (replace with actual private IPs):
+```ini
+[webservers]
+node1 ansible_host=10.0.1.10 ansible_user=ec2-user
+node2 ansible_host=10.0.1.11 ansible_user=ec2-user
+
+[databases]
+node1 ansible_host=10.0.1.10 ansible_user=ec2-user
+
+[all:vars]
+ansible_ssh_private_key_file=/home/ec2-user/.ssh/id_rsa
+```
+
+### Step 6: Configure Ansible Settings
+
+Create ansible configuration file:
+```bash
+sudo vi /etc/ansible/ansible.cfg
+```
+
+Add basic configuration:
+```ini
+[defaults]
+inventory = /etc/ansible/hosts
+remote_user = ec2-user
+host_key_checking = False
+retry_files_enabled = False
+gathering = smart
+fact_caching = memory
+
+[ssh_connection]
+ssh_args = -o ControlMaster=auto -o ControlPersist=60s
+pipelining = True
+```
+
+### Step 7: Test Ansible Connectivity
+
+Test connection to all hosts:
+```bash
 ansible all -m ping
 ```
 
-12. Example ad-hoc commands (basic management)
-
-Create a user on all hosts (requires privilege escalation):
-
+Test connection to specific group:
 ```bash
-ansible all -m user -a "name=ansible-new" --become
+ansible webservers -m ping
 ```
 
-Change directory permissions on node1:
-
+Get system information from all hosts:
 ```bash
-ansible node1 -m file -a "dest=/home/ansible-new mode=755" --become
+ansible all -m setup -a "filter=ansible_distribution*"
 ```
 
-Copy a local file from control node to managed node:
-
+Check uptime on all hosts:
 ```bash
-touch test.txt
-echo "This file will be copied to managed node using copy module" >> test.txt
-ansible node1 -m copy -a "src=test.txt dest=/home/ansible-new/test" -b
+ansible all -m command -a "uptime"
 ```
 
-Use `-b` as shorthand for `--become` when running modules that need elevated privileges.
+### Step 8: Basic Ad-Hoc Commands
 
----
+Check disk space:
+```bash
+ansible all -m command -a "df -h"
+```
 
-## Verification / Expected outcome
+List running processes:
+```bash
+ansible all -m command -a "ps aux | head -10"
+```
 
-- `ansible all --list-hosts` should list the inventory hosts.
-- `ansible all -m ping` should return `pong` for reachable hosts.
-- `ansible node1 -a "ls /home"` should show `/home/ansible-new` when created.
+Check memory usage:
+```bash
+ansible all -m command -a "free -h"
+```
 
----
+Reboot managed nodes (with confirmation):
+```bash
+ansible all -m reboot --become
+```
 
-## Troubleshooting
+### Step 9: Verify Installation
 
-- SSH connection errors: ensure the security group allows your IP and that the correct keypair is used.
-- Permission denied when using `--become`: confirm the remote user (`ec2-user`) has sudo privileges.
-- `ansible: command not found`: make sure Python/pip installed and the `ansible` executable is in PATH (pip may have installed to `/usr/local/bin` — log out/in or use full path).
-- If a module fails due to missing Python packages on managed nodes, you may need to install Python on those nodes or use `ansible_connection=local` for localhost runs.
+List all inventory hosts:
+```bash
+ansible-inventory --list
+```
 
----
+Show inventory graph:
+```bash
+ansible-inventory --graph
+```
 
-## Security note
-- Do not commit or paste real AWS credentials or secret keys into files that will be shared. Replace secrets with placeholders in training material.
+Test ansible-playbook command:
+```bash
+ansible-playbook --version
+```
 
----
+Validate configuration:
+```bash
+ansible-config dump --only-changed
+```
 
-## References
-- Ansible docs: https://docs.ansible.com/
-- AWS CLI docs: https://docs.aws.amazon.com/cli/latest/
+## Key Concepts Learned
+- Ansible architecture (control node vs managed nodes)
+- SSH key-based authentication setup
+- Inventory file structure and grouping
+- Basic ansible.cfg configuration
+- Ad-hoc command execution with ansible command
+- Testing connectivity with ping module
+
+## Best Practices Implemented
+- Disabled host key checking for lab environment
+- Used SSH connection optimization
+- Organized hosts into logical groups
+- Used variables for common settings
+
+## Troubleshooting Tips
+
+**SSH Connection Issues:**
+- Verify private key permissions: `chmod 600 ~/.ssh/id_rsa`
+- Check security group rules allow SSH access
+- Ensure correct private IP addresses in inventory
+- Test manual SSH connection first
+
+**Permission Errors:**
+- Use `--become` flag for privilege escalation
+- Verify sudo access on managed nodes
+- Check ansible_user configuration
+
+**Inventory Issues:**
+- Validate YAML/INI syntax
+- Use `ansible-inventory --list` to debug
+- Check host grouping and variables
+
+## Lab Verification
+Successful completion indicators:
+- `ansible all -m ping` returns SUCCESS for all hosts
+- Ad-hoc commands execute without errors  
+- Ansible version information displays correctly
+- SSH key authentication works without password prompts
+
+## Next Steps
+- Proceed to Lab 2 for ad-hoc commands exploration
+- Learn about Ansible modules and their usage
+- Explore playbook creation and execution

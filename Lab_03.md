@@ -1,11 +1,25 @@
 # Lab 3: Implementing Ansible Playbook
 
+## Objective
+Learn to create and execute Ansible playbooks for installing and configuring Apache web server.
+
+## Prerequisites
+- Completed Labs 1 and 2
+- Access to managed nodes with sudo privileges
+
+## Lab Steps
+
+### Step 1: Create Working Directory
+
 Create a labs directory and work there:
 ```bash
-mkdir ansible-labs && cd ansible-labs
+mkdir ansible-labs
+```
+```bash
+cd ansible-labs
 ```
 
-Task 1: Playbook to install apache web server
+### Step 2: Create Apache Installation Playbook
 
 Create `install-apache-pb.yml` with the following content:
 ```yaml
@@ -35,6 +49,8 @@ Create `install-apache-pb.yml` with the following content:
         state: started
 ```
 
+### Step 3: Create Index HTML File
+
 Create `index.html` used by the playbook:
 ```html
 <html>
@@ -44,16 +60,44 @@ Create `index.html` used by the playbook:
 </html>
 ```
 
+### Step 4: Execute the Playbook
+
 Run the playbook:
 ```bash
 ansible-playbook install-apache-pb.yml
 ```
 
-Task 2: Uninstall apache (exercise)
-
-Copy and edit the playbook to use `state: absent` to remove httpd and run with `--check` first.
+Verify the installation by checking if Apache is running:
 ```bash
-cp install-apache-pb.yml uninstall-apache-pb.yml
-ansible-playbook uninstall-apache-pb.yml --check
-ansible-playbook uninstall-apache-pb.yml
+ansible all -a "systemctl status httpd" --become
 ```
+
+Test the web server:
+```bash
+ansible all -a "curl -s localhost"
+```
+
+### Step 5: Playbook Validation
+
+Check playbook syntax before execution:
+```bash
+ansible-playbook install-apache-pb.yml --syntax-check
+```
+
+Perform a dry run:
+```bash
+ansible-playbook install-apache-pb.yml --check
+```
+
+## Key Concepts Learned
+- Playbook structure: hosts, become, tasks
+- Common modules: yum, copy, file, service
+- YAML syntax and indentation
+- Task naming and organization
+- Privilege escalation with become
+
+## Troubleshooting
+- Ensure proper YAML indentation (use spaces, not tabs)
+- Verify file paths in copy module source
+- Check firewall settings if web server is not accessible
+- Ensure managed nodes have internet connectivity for package installation
