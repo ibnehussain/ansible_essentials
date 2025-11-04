@@ -1,4 +1,3 @@
-```markdown
 # Lab 3: Implementing Ansible Playbook
 
 Create a labs directory and work there:
@@ -58,5 +57,3 @@ cp install-apache-pb.yml uninstall-apache-pb.yml
 ansible-playbook uninstall-apache-pb.yml --check
 ansible-playbook uninstall-apache-pb.yml
 ```
-
-*** End Patch

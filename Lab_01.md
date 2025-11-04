@@ -166,12 +166,3 @@ Use `-b` as shorthand for `--become` when running modules that need elevated pri
 ## References
 - Ansible docs: https://docs.ansible.com/
 - AWS CLI docs: https://docs.aws.amazon.com/cli/latest/
-
----
-
-If you'd like, I can now:
-- Apply the same improvements (objectives, prerequisites, verification and troubleshooting) to the other lab files (`Lab_02.md` .. `Lab_10.md`).
-- Create a `README.md` index that links to each lab.
-
-Tell me which you prefer and I'll continue.
-**save the file using** `ESCAPE + :wq!`

@@ -1,4 +1,3 @@
-```markdown
 # Lab 2: Exploring Ad-Hoc Commands
 
 Edit the inventory:
@@ -6,7 +5,7 @@ Edit the inventory:
 sudo vi /etc/ansible/hosts
 ```
 Add the given line (press INSERT):
-```
+```text
 localhost ansible_connection=local
 ```
 save the file using `ESCAPE + :wq!`
@@ -64,5 +63,3 @@ Remove the localhost entry from inventory when done and save.
 sudo vi /etc/ansible/hosts
 # remove: localhost ansible_connection=local
 ```
-```
-*** End Patch

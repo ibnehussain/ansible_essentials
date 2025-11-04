@@ -1,4 +1,3 @@
-```markdown
 # Lab 7: Implementing Ansible Vault
 
 Change to the lab folder and encrypt `implement-vars.yml` using ansible-vault:
@@ -30,5 +29,3 @@ To decrypt:
 ```bash
 ansible-vault decrypt implement-vars.yml
 ```
-
-*** End Patch

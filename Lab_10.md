@@ -1,4 +1,3 @@
-```markdown
 # Lab 10: Implementing Ansible Roles
 
 Task 1: Implementing Ansible Roles
@@ -47,5 +46,3 @@ Create `implement-java.yml` that uses the role and run:
 ```bash
 ansible-playbook implement-java.yml
 ```
-
-*** End Patch

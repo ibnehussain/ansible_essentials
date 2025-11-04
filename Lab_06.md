@@ -1,4 +1,3 @@
-```markdown
 # Lab 6: Task Inclusion
 
 Create `second.yml` with tasks to install and start httpd:
@@ -60,5 +59,3 @@ Run the playbooks with:
 ansible-playbook first.yml
 ansible-playbook third.yml
 ```
-
-*** End Patch

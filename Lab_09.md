@@ -1,4 +1,3 @@
-```markdown
 # Lab 9: Implementing Jinja2 Templates
 
 Create a `templates` directory and add `new-motd.j2` with content:
@@ -34,5 +33,3 @@ Check the generated motd:
 ```bash
 ansible all -m shell -a "cat /etc/motd"
 ```
-
-*** End Patch

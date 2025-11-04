@@ -1,4 +1,3 @@
-```markdown
 # Lab 4: Exploring more on Ansible Playbooks
 
 Task 1: Creating a playbook and adding content to a file
@@ -26,5 +25,3 @@ Verify files and permissions:
 ansible all -a "sudo cat /home/cloudthat/ansible/hello.txt"
 ansible all -a "sudo ls -l /home/cloudthat/ansible/"
 ```
-
-*** End Patch

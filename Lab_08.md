@@ -1,4 +1,3 @@
-```markdown
 # Lab 8: Working with ansible functions
 
 Task 1: Loops with Ansible Playbook
@@ -51,5 +50,3 @@ Create `rolab.yml` that uses `run_once: true`.
 Task 6: Blocks with Ansible Playbook
 
 Create `blklab.yml` demonstrating `block`, `rescue`, and `always`.
-
-*** End Patch
