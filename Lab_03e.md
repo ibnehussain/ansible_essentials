@@ -76,11 +76,16 @@ Add the following content:
         name: git
         state: latest
 
+    - name: Gather package facts
+      package_facts:
+        manager: auto
+
     - name: Verify file content only if git is installed
       copy:
         dest: /opt/devops-tools/readme.txt
         content: "This is a reusable Ansible task example."
       when: ansible_facts.packages.git is defined
+
 ```
 
 Save the file using:
@@ -140,6 +145,10 @@ Modify it as follows:
         name: git
         state: latest
       tags: install
+
+    - name: Gather package facts
+      package_facts:
+        manager: auto
 
     - name: Verify file content only if git is installed
       copy:
