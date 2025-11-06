@@ -141,7 +141,20 @@ ls -l index.html
 cat index.html
 ```
 
-### Step 4: Execute the Playbook 🚀
+### Step 4: Playbook Validation 🛠️
+
+#### Check Playbook Syntax ✅
+Check playbook syntax before execution:
+```bash
+ansible-playbook install-apache-pb.yml --syntax-check
+```
+#### Perform a Dry Run ✅
+Perform a dry run:
+```bash
+ansible-playbook install-apache-pb.yml --check
+```
+
+### Step 5: Execute the Playbook 🚀
 
 Run the playbook:
 ```bash
@@ -158,7 +171,7 @@ Test the web server:
 ansible all -a "curl -s localhost"
 ```
 
-### Step 5: Uninstall Apache Web Server 🛠️
+### Step 6: Uninstall Apache Web Server 🛠️
 
 #### Create Uninstall Playbook 🛠️
 Create `uninstall-apache-pb.yml` to remove Apache:
@@ -196,19 +209,6 @@ ansible all -a "systemctl status httpd" --become
 Check if package is removed:
 ```bash
 ansible all -a "yum list installed httpd" --become
-```
-
-### Step 6: Playbook Validation 🛠️
-
-#### Check Playbook Syntax ✅
-Check playbook syntax before execution:
-```bash
-ansible-playbook install-apache-pb.yml --syntax-check
-```
-#### Perform a Dry Run ✅
-Perform a dry run:
-```bash
-ansible-playbook install-apache-pb.yml --check
 ```
 
 ### Step 7: Cleanup 🧹
