@@ -1,240 +1,211 @@
-# Lab 6: Ansible Templates with Jinja2
+# 🧪 Lab 6: Task Inclusion in Ansible
+
+---
 
 ## Objective
-Learn to create dynamic configuration files using Ansible templates and Jinja2 templating engine.
+In this lab, you will learn how to:
+- Create a **separate task file** containing reusable tasks.  
+- Include that task file into multiple playbooks using **`include_tasks`**.  
+- Use **conditional task inclusion** based on previous task results.
 
-## Prerequisites
-- Completed Labs 1-5
-- Understanding of variables and vault concepts
-
-## Lab Steps
-
-### Step 1: Create Apache Configuration Template
-
-Create `templates/httpd.conf.j2`:
-```bash
-mkdir templates
-```
-
-Create the template file `templates/httpd.conf.j2`:
-```jinja2
-# Apache Configuration Template
-ServerRoot /etc/httpd
-Listen {{ apache_port | default(80) }}
-ServerName {{ server_name | default(ansible_fqdn) }}
-DocumentRoot {{ document_root | default('/var/www/html') }}
-
-# Server Administrator
-ServerAdmin {{ server_admin | default('webmaster@localhost') }}
-
-# Directory Configuration
-<Directory "{{ document_root }}">
-    Options {{ directory_options | default('Indexes FollowSymLinks') }}
-    AllowOverride {{ allow_override | default('None') }}
-    Require all granted
-</Directory>
-
-# Logging Configuration
-ErrorLog {{ error_log | default('/var/log/httpd/error_log') }}
-LogLevel {{ log_level | default('warn') }}
-
-# Modules
-{% for module in apache_modules %}
-LoadModule {{ module }}
-{% endfor %}
-
-# Virtual Hosts
-{% if virtual_hosts is defined %}
-{% for vhost in virtual_hosts %}
-<VirtualHost *:{{ vhost.port }}>
-    ServerName {{ vhost.server_name }}
-    DocumentRoot {{ vhost.document_root }}
-    ErrorLog {{ vhost.error_log }}
-    CustomLog {{ vhost.access_log }} combined
-</VirtualHost>
-{% endfor %}
-{% endif %}
-```
-
-### Step 2: Create Variables File for Template
-
-Create `template_vars.yml`:
-```yaml
 ---
-apache_port: 8080
-server_name: myserver.example.com
-server_admin: admin@example.com
-document_root: /var/www/html
-directory_options: "Indexes FollowSymLinks"
-allow_override: "All"
-log_level: info
-apache_modules:
-  - rewrite_module modules/mod_rewrite.so
-  - ssl_module modules/mod_ssl.so
-  - headers_module modules/mod_headers.so
 
-virtual_hosts:
-  - server_name: site1.example.com
-    port: 8080
-    document_root: /var/www/site1
-    error_log: /var/log/httpd/site1_error.log
-    access_log: /var/log/httpd/site1_access.log
-  - server_name: site2.example.com
-    port: 8080
-    document_root: /var/www/site2
-    error_log: /var/log/httpd/site2_error.log
-    access_log: /var/log/httpd/site2_access.log
-```
+## Task 1: Create a Separate Task File
 
-### Step 3: Create Template Deployment Playbook
+1. **Create a file named `second.yml`** that contains tasks to install and start the **httpd (Apache)** service.
+   ```bash
+   vi second.yml
+   ```
 
-Create `template-deployment.yml`:
-```yaml
+2. **Add the following content:**
+   ```yaml
+   ---
+     - name: install the httpd package
+       yum:
+         name: httpd
+         state: latest
+         update_cache: yes
+
+     - name: start the httpd service
+       service:
+         name: httpd
+         state: started
+         enabled: yes
+   ```
+
+   **Explanation:**
+   - `yum:` installs the latest version of **httpd**.  
+   - `service:` ensures the **httpd** service is **started** and **enabled** on boot.  
+   - This task file will be **included** later in other playbooks.
+
+3. **Save and exit**  
+   Press `ESCAPE` → type `:wq!` → press `Enter`.
+
 ---
-- name: Apache template deployment
-  hosts: all
-  become: yes
-  vars_files:
-    - template_vars.yml
-  tasks:
-    - name: Install Apache
-      yum:
-        name: httpd
-        state: present
-    
-    - name: Deploy Apache configuration from template
-      template:
-        src: templates/httpd.conf.j2
-        dest: /etc/httpd/conf/httpd.conf
-        backup: yes
-        owner: root
-        group: root
-        mode: '0644'
-      notify: restart apache
-    
-    - name: Create virtual host directories
-      file:
-        path: "{{ item.document_root }}"
-        state: directory
-        owner: apache
-        group: apache
-        mode: '0755'
-      loop: "{{ virtual_hosts }}"
-      when: virtual_hosts is defined
-    
-    - name: Create sample index files for virtual hosts
-      template:
-        src: templates/index.html.j2
-        dest: "{{ item.document_root }}/index.html"
-        owner: apache
-        group: apache
-        mode: '0644'
-      loop: "{{ virtual_hosts }}"
-      when: virtual_hosts is defined
-    
-    - name: Start and enable Apache
-      service:
-        name: httpd
-        state: started
-        enabled: yes
-  
-  handlers:
-    - name: restart apache
-      service:
-        name: httpd
-        state: restarted
-```
 
-### Step 4: Create Index Template
+## Task 2: Create a Playbook to Include the Task File
 
-Create `templates/index.html.j2`:
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ item.server_name }}</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        .header { color: #333; border-bottom: 2px solid #ccc; }
-        .info { background: #f4f4f4; padding: 20px; margin: 20px 0; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>Welcome to {{ item.server_name }}</h1>
-    </div>
-    
-    <div class="info">
-        <h3>Server Information</h3>
-        <ul>
-            <li><strong>Server Name:</strong> {{ item.server_name }}</li>
-            <li><strong>Document Root:</strong> {{ item.document_root }}</li>
-            <li><strong>Generated:</strong> {{ ansible_date_time.iso8601 }}</li>
-            <li><strong>Managed by:</strong> Ansible Template</li>
-            <li><strong>Host:</strong> {{ ansible_hostname }}</li>
-            <li><strong>IP:</strong> {{ ansible_default_ipv4.address | default('N/A') }}</li>
-        </ul>
-    </div>
-    
-    <div>
-        <h3>Template Variables Used</h3>
-        <pre>
-Apache Port: {{ apache_port }}
-Log Level: {{ log_level }}
-Server Admin: {{ server_admin }}
-        </pre>
-    </div>
-</body>
-</html>
-```
+1. **Create a new playbook named `first.yml`**
+   ```bash
+   vi first.yml
+   ```
 
-### Step 5: Deploy Templates
+2. **Add the following content:**
+   ```yaml
+   ---
+   - hosts: all
+     gather_facts: no
+     become: yes
+     tasks:
+       - name: install common packages
+         yum:
+           name: [wget, curl]
+           state: present
 
-Run the template deployment:
+       - name: inclue task for httpd installation
+         include_tasks: second.yml
+   ```
+
+   **Explanation:**
+   - `include_tasks:` is used to include another YAML file containing tasks.  
+   - This allows for **modular** and **reusable** playbook design.  
+   - The `yum` module installs `wget` and `curl` before including the httpd installation tasks.
+
+3. **Save and exit**  
+   Press `ESCAPE` → `:wq!` → `Enter`.
+
+4. **Execute the playbook**
+   ```bash
+   ansible-playbook first.yml
+   ```
+
+   The playbook will:
+   - Install `wget` and `curl`.  
+   - Include and execute tasks from `second.yml` (installing and starting `httpd`).
+
+---
+
+## Task 3: Include Tasks Conditionally
+
+1. **Create another playbook named `third.yml`**
+   ```bash
+   vi third.yml
+   ```
+
+2. **Add the following content:**
+   ```yaml
+   ---
+   - hosts: all
+     gather_facts: no
+     become: yes
+     tasks:
+       - name: install common packages
+         yum:
+           name: [wget, curl]
+           state: present
+         register: out
+
+       - name: list result of previous task
+         debug:
+           msg: "{{ out.rc }}"
+
+       - name: inclue task for httpd installation
+         include_tasks: second.yml
+         when: out.rc == 0
+   ```
+
+   **Explanation:**
+   - The first task installs common utilities and **registers** its result in the variable `out`.  
+   - The `debug` task displays the **return code (`rc`)** of the previous task (0 = success).  
+   - The `include_tasks:` for `second.yml` is executed **only if the previous task succeeded** (`when: out.rc == 0`).
+
+3. **Save and exit**  
+   Press `ESCAPE` → `:wq!` → `Enter`.
+
+4. **Run the playbook**
+   ```bash
+   ansible-playbook third.yml
+   ```
+
+   **Expected outcome:**
+   - The playbook installs `wget` and `curl`.  
+   - Displays the return code (`0` on success).  
+   - Includes and runs the `second.yml` tasks conditionally.
+
+---
+
+## Task 4: Verify Installed Packages
+
+Check whether `wget` and `curl` are installed on all managed nodes.
+
 ```bash
-ansible-playbook template-deployment.yml
+ansible all -m command -a "yum list wget curl" -b
 ```
 
-Verify the generated configuration:
-```bash
-ansible all -a "head -20 /etc/httpd/conf/httpd.conf"
-```
+**Explanation:**
+- `-m command` executes a command module.  
+- `-a` specifies the actual shell command to run on the nodes.  
+- `-b` runs the command with **sudo (become)** privileges.
 
-Check virtual host content:
-```bash
-ansible all -a "cat /var/www/site1/index.html"
-```
+---
 
-### Step 6: Template Validation
+## ✅ Summary
 
-Check template syntax before deployment:
-```bash
-ansible-playbook template-deployment.yml --check
-```
+| Concept | Description |
+|----------|--------------|
+| **Task File (`second.yml`)** | Contains reusable tasks for installing and starting httpd |
+| **Playbook (`first.yml`)** | Includes `second.yml` directly using `include_tasks` |
+| **Playbook (`third.yml`)** | Includes tasks conditionally, only if previous task succeeds |
+| **Verification Command** | Confirms installation of `wget` and `curl` |
 
-Validate Apache configuration:
-```bash
-ansible all -a "httpd -t" --become
-```
+---
 
-## Key Concepts Learned
-- Jinja2 template syntax and filters
-- Using `template` module for dynamic file generation
-- Template variables and default values
-- Conditional statements and loops in templates
-- File backup and permissions with template module
-- Integration of templates with playbooks and handlers
+## 🎓 **What You Have Learned**
 
-## Template Best Practices
-- Use meaningful variable names and defaults
-- Organize templates in a dedicated directory
-- Validate template output before deployment
-- Use backup option for critical configuration files
-- Comment template files for maintainability
+Congratulations! By completing this lab, you have mastered the powerful concept of task inclusion in Ansible. Here's what you've accomplished:
 
-## Troubleshooting
-- Check Jinja2 syntax for errors
-- Verify variable definitions and scope
-- Test templates with `--check` mode first
-- Review backup files when templates fail
-- Use `debug` module to inspect template variables
+### **📚 Core Knowledge Gained:**
+
+✅ **Modular Ansible Design**
+- You understand how to break down complex automation into **reusable task files**
+- You've learned to create **separate YAML files** containing specific sets of tasks
+- You can now design **maintainable and organized** playbook structures
+
+✅ **Task Inclusion Techniques**
+- **Direct inclusion** using `include_tasks:` directive to incorporate external task files
+- **Conditional inclusion** using `when:` statements to control task execution flow
+- **Result registration** using `register:` to capture and use task outcomes
+
+✅ **Advanced Playbook Orchestration**
+- **Error handling** and conditional logic based on previous task results
+- **Return code evaluation** using `out.rc` to determine task success/failure
+- **Dynamic workflow control** where tasks execute based on runtime conditions
+
+✅ **Best Practices Implementation**
+- **DRY Principle** (Don't Repeat Yourself) - reusing task files across multiple playbooks
+- **Separation of concerns** - organizing tasks by functionality
+- **Debugging techniques** using the `debug` module to troubleshoot task execution
+
+### **🚀 Real-World Applications You Can Now Handle:**
+
+- **Infrastructure as Code** with modular, reusable automation components
+- **Multi-environment deployments** where task inclusion varies by environment
+- **Complex application deployments** with conditional installation steps
+- **Maintenance playbooks** that adapt based on system state and previous operations
+- **CI/CD pipelines** with conditional deployment stages based on test results
+
+### **💡 Key Takeaways:**
+
+> **"Task inclusion transforms monolithic playbooks into flexible, modular automation that adapts to changing requirements and promotes code reusability."**
+
+### **🛠️ Skills You Can Apply Immediately:**
+
+- **Create reusable task libraries** for common operations (web server setup, database configuration, etc.)
+- **Build intelligent playbooks** that make decisions based on runtime conditions
+- **Design scalable automation** that grows with your infrastructure needs
+- **Implement robust error handling** in your automation workflows
+- **Collaborate effectively** with teams using shared, modular task components
+
+You've learned to write **smarter, more flexible** Ansible automation that adapts to real-world scenarios and promotes best practices in infrastructure management! 🎯
+
+---
