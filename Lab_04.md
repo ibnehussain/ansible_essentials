@@ -6,13 +6,8 @@
 
 ### **Task 1: Configuring Packages in Ansible Using Variables**
 
-1. **Navigate to your Ansible labs directory**
 
-   ```bash
-   cd ~/ansible-labs/
-   ```
-
-2. **Create a dedicated folder for variables practice**
+1. **Create a dedicated folder for variables practice**
 
    ```bash
    mkdir variables-lab && cd variables-lab
@@ -20,7 +15,7 @@
 
    This creates a clean workspace specifically for learning Ansible variables.
 
-3. **Create Index HTML File** 🛠️
+2. **Create Index HTML File** 🛠️
 
    Create the HTML file manually:
    ```bash
@@ -58,7 +53,7 @@
        hostname: all
        package1: httpd
        destination: /var/www/html/index.html
-       source: /home/ec2-user/ansible-labs/index.html
+       source: /home/ec2-user/variables-labs/index.html
      tasks:
        - name: Install defined package
          yum:
