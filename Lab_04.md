@@ -1,5 +1,5 @@
 
-## Lab 5: Implementing Ansible Variables
+## Lab 4: Implementing Ansible Variables
 
 ---------------------------------------------------------------------------------------------
 ### Task 1: Configuring packages in ansible using variables
