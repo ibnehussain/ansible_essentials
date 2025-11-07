@@ -6,17 +6,24 @@
 
 ### **Task 1: Configuring Packages in Ansible Using Variables**
 
-1. **Navigate to your Ansible labs directory**
+1. **Navigate to your Ansible labs directory and prepare workspace**
 
    ```bash
    cd ~/ansible-labs/
    ```
 
-2. **Create a new folder and move into it**
+   If the `ansible-labs` directory doesn't exist, create it first:
+   ```bash
+   mkdir -p ~/ansible-labs && cd ~/ansible-labs
+   ```
+
+2. **Create a dedicated folder for variables practice**
 
    ```bash
-   mkdir file && cd file
+   mkdir variables-lab && cd variables-lab
    ```
+
+   This creates a clean workspace specifically for learning Ansible variables.
 
 3. **Create Index HTML File** 🛠️
 
