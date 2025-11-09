@@ -242,6 +242,12 @@ cp secret_vars.yml secret_vars_corrupt.yml
 sed -i 's/a/b/' secret_vars_corrupt.yml
 ```
 
+**📝 What this command does:**
+- `sed` = Stream Editor for filtering and transforming text
+- `-i` = Edit the file in-place (directly modify the original file)
+- `'s/a/b/'` = Substitute the first occurrence of letter 'a' with letter 'b'
+- This corrupts the encrypted content by changing just one character
+
 **Attempt to view it with Vault:**
 ```bash
 ansible-vault view secret_vars_corrupt.yml --ask-vault-pass
