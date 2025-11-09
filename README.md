@@ -65,11 +65,15 @@ curl -sSL https://raw.githubusercontent.com/ibnehussain/ansible_essentials/main/
 - Learn advanced playbook organization techniques
 - **Topics**: Task inclusion, modularity, code organization, reusability patterns
 
-### **[Lab 07 — Conditional Execution and Loops](./Lab_07.md)** ⚠️
-- Implement conditional logic in playbooks
-- Master various loop constructs
-- Use advanced control structures
-- **Topics**: Conditionals, loops, control flow, fact-based decisions
+### **🔐 [Lab 07 — Ansible Vault for Secrets Management](./Lab_07.md)**
+- **Enhanced with**: Comprehensive security testing, multi-environment management, advanced vault operations
+- Master Ansible Vault for encrypting sensitive data and secrets
+- Learn vault file creation, encryption, and decryption workflows
+- Implement secure password management and rotation strategies
+- Practice security testing including corruption detection and access control
+- Manage multi-environment vault configurations with Vault IDs
+- Integrate with cloud secret management services (AWS, Azure)
+- **Topics**: Encryption, vault operations, security testing, multi-environment setup, cloud integration
 
 ### **[Lab 08 — Handlers and Notifications](./Lab_08.md)** ⚠️
 - Implement service restart automation
@@ -89,7 +93,7 @@ curl -sSL https://raw.githubusercontent.com/ibnehussain/ansible_essentials/main/
 - Build complete application stacks
 - **Topics**: Roles, modularity, reusability, best practices
 
-> **📝 Note**: Labs 7-10 are currently being improvised and enhanced. Content may be updated as these labs are refined and expanded.
+> **📝 Note**: Labs 8-10 are currently being improvised and enhanced. Content may be updated as these labs are refined and expanded.
 
 ## 🛠️ Automation Scripts
 
@@ -157,13 +161,13 @@ curl -sSL https://raw.githubusercontent.com/ibnehussain/ansible_essentials/main/
 - **Lab 2**: Ad-hoc commands with practical examples
 - **Lab 3**: First playbooks with validation and best practices
 
-### **Phase 2: Advanced Concepts** (Labs 4-6)
+### **Phase 2: Advanced Concepts** (Labs 4-7)
 - **Lab 4**: Variables and dynamic configurations
 - **Lab 5**: Facts deep dive and system discovery
 - **Lab 6**: Modular design and task inclusion
+- **Lab 7**: Secure secrets management with Ansible Vault
 
-### **Phase 3: Production Ready** (Labs 7-10) ⚠️ *In Development*
-- **Lab 7**: Advanced control flow and conditionals
+### **Phase 3: Production Ready** (Labs 8-10) ⚠️ *In Development*
 - **Lab 8**: Event-driven automation with handlers
 - **Lab 9**: Enterprise debugging and error handling
 - **Lab 10**: Role-based architecture and scalability
