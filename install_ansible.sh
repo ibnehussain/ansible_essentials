@@ -154,19 +154,19 @@ main() {
     cd ~/ansible-labs
     print_success "Created ~/ansible-labs directory"
     
-    # Step 12: Download sample playbook
-    print_header "📥 Step 10: Downloading Sample Playbook"
-    print_status "Downloading sample Ansible playbook..."
-    if [ -f "ansible_script.yaml" ]; then
-        print_warning "ansible_script.yaml already exists. Backing up..."
-        mv ansible_script.yaml ansible_script.yaml.backup.$(date +%Y%m%d_%H%M%S)
+    # Step 12: Download managed nodes creation playbook
+    print_header "📥 Step 10: Downloading Managed Nodes Creation Playbook"
+    print_status "Downloading create_managed_nodes.yml playbook..."
+    if [ -f "create_managed_nodes.yml" ]; then
+        print_warning "create_managed_nodes.yml already exists. Backing up..."
+        mv create_managed_nodes.yml create_managed_nodes.yml.backup.$(date +%Y%m%d_%H%M%S)
     fi
     
-    wget https://devops-code-sruti.s3.us-east-1.amazonaws.com/ansible_script.yaml
-    if [ -f "ansible_script.yaml" ]; then
-        print_success "Sample playbook downloaded successfully"
+    wget https://raw.githubusercontent.com/ibnehussain/ansible_essentials/main/create_managed_nodes.yml
+    if [ -f "create_managed_nodes.yml" ]; then
+        print_success "Managed nodes creation playbook downloaded successfully"
     else
-        print_error "Failed to download sample playbook"
+        print_error "Failed to download managed nodes playbook"
     fi
     
     # Final verification
@@ -185,10 +185,10 @@ main() {
     
     echo -e "\n${YELLOW}📋 NEXT STEPS:${NC}"
     echo -e "1. Configure AWS credentials: ${BLUE}aws configure${NC}"
-    echo -e "2. Set up managed nodes in: ${BLUE}sudo vi /etc/ansible/hosts${NC}"
-    echo -e "3. Test connectivity: ${BLUE}ansible all -m ping${NC}"
+    echo -e "2. Create managed nodes: ${BLUE}ansible-playbook create_managed_nodes.yml${NC}"
+    echo -e "3. Test connectivity: ${BLUE}ansible all -m ping -i managed_nodes_inventory${NC}"
     echo -e "4. Navigate to working directory: ${BLUE}cd ~/ansible-labs${NC}"
-    echo -e "5. Run sample playbook: ${BLUE}ansible-playbook ansible_script.yaml${NC}"
+    echo -e "5. Start managing your infrastructure with Ansible!"
     
     echo -e "\n${GREEN}🚀 Your Ansible Control Node is ready!${NC}\n"
 }
