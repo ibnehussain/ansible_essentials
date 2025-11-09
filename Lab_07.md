@@ -223,20 +223,29 @@ You'll be prompted for the **old password** and then the **new password**.
 ### **🔒 Before You Begin - Create Backup**
 
 Always make a backup of your Vault file before testing destructive operations:
-**Purpose:** See how Ansible detects tampering or corruption.
 
 ```bash
-# Make a copy to test on
+cp secret_vars.yml secret_vars.yml.bak
+```
+
+---
+
+### **Step 11: Corrupt the Vault File (Intentional Tampering)**
+
+**Purpose:** See how Ansible detects tampering or corruption.
+
+**Make a copy to test on:**
+```bash
 cp secret_vars.yml secret_vars_corrupt.yml
 ```
 
+**Modify a single byte in the file:**
 ```bash
-# Modify a single byte in the file
 sed -i 's/a/b/' secret_vars_corrupt.yml
 ```
 
+**Attempt to view it with Vault:**
 ```bash
-# Attempt to view it with Vault
 ansible-vault view secret_vars_corrupt.yml --ask-vault-pass
 ```
 
@@ -255,13 +264,13 @@ AnsibleVaultError: Decryption failed (invalid checksum or data)
 
 **Purpose:** Observe how Ansible behaves with incorrect passwords.
 
+**Create a fake password file:**
 ```bash
-# Create a fake password file
 echo "wrongpassword" > /tmp/wrong_pass.txt
 ```
 
+**Try running a playbook using the wrong password:**
 ```bash
-# Try running a playbook using the wrong password
 ansible-playbook vault_play.yml --vault-password-file /tmp/wrong_pass.txt
 ```
 
@@ -278,8 +287,8 @@ ERROR! Decryption failed
 
 **Purpose:** Practice rotating (changing) the Vault password safely.
 
+**Change the vault password for an existing file:**
 ```bash
-# Change the vault password for an existing file
 ansible-vault rekey secret_vars.yml
 ```
 
@@ -287,8 +296,8 @@ You'll be prompted to enter:
 1. The **old password**
 2. The **new password**
 
+**Verify the new password works:**
 ```bash
-# Verify the new password works
 ansible-vault view secret_vars.yml --ask-vault-pass
 ```
 
@@ -309,18 +318,18 @@ debug_mode: true
 EOF
 ```
 
+**Encrypt a plaintext variable file:**
 ```bash
-# Encrypt a plaintext variable file
 ansible-vault encrypt plain_vars.yml
 ```
 
+**Verify it's now encrypted:**
 ```bash
-# Verify it's now encrypted
 head -n 3 plain_vars.yml
 ```
 
+**Decrypt it back to plaintext:**
 ```bash
-# Decrypt it back to plaintext
 ansible-vault decrypt plain_vars.yml
 ```
 
