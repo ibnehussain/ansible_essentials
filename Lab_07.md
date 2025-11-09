@@ -48,13 +48,13 @@ db_password: MySecret123
 
 Before encryption, let's examine the file to understand its current state:
 
+**View the file contents:**
 ```bash
-# View the file contents
 cat secret_vars.yml
 ```
 
+**Check file size and properties:**
 ```bash
-# Check file size and properties
 ls -la secret_vars.yml
 ```
 
@@ -82,19 +82,23 @@ You will be prompted to **enter a vault password** (choose a strong one).
 
 After encryption, let's examine how the file has changed:
 
+**View the encrypted file contents:**
 ```bash
-# View the encrypted file contents
 cat secret_vars.yml
 ```
 
+**Check if file size changed:**
 ```bash
-# Check if file size changed
 ls -la secret_vars.yml
 ```
 
-
+**Generate new checksum to see the change:**
 ```bash
-# View just the header of the encrypted file
+md5sum secret_vars.yml
+```
+
+**View just the header of the encrypted file:**
+```bash
 head -n 3 secret_vars.yml
 ```
 
@@ -115,7 +119,6 @@ $ANSIBLE_VAULT;1.1;AES256
 Try to read the file as YAML to confirm it's properly encrypted:
 
 ```bash
-# This should fail with a parsing error
 ansible-playbook -e "@secret_vars.yml" /dev/null 2>&1 | head -n 3
 ```
 
@@ -264,18 +267,18 @@ cp secret_vars.yml secret_vars.yml.bak
 
 **Purpose:** Learn how to view the structure of an encrypted file and verify its integrity.
 
+**View the first few lines of the vault file:**
 ```bash
-# View the first few lines of the vault file
 head -n 5 secret_vars.yml
 ```
 
+**Generate a checksum:**
 ```bash
-# Generate a checksum
 sha256sum secret_vars.yml > secret_vars.yml.sha256
 ```
 
+**Display checksum value:**
 ```bash
-# Display checksum value
 cat secret_vars.yml.sha256
 ```
 
