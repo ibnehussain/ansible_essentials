@@ -211,55 +211,10 @@ You'll be prompted for the **old password** and then the **new password**.
 
 ---
 
-## 📖 **Cloud Secret Management Overview**
 
-For production environments, consider integrating Ansible Vault with cloud secret management services:
+## 🧩 Advanced Section: Vault Testing & Security
 
-### **🔑 Popular Cloud Secret Managers:**
-- **AWS Secrets Manager**: Securely store and retrieve vault passwords
-- **Azure Key Vault**: Centralized secret management for Azure environments  
-- **HashiCorp Vault**: Enterprise-grade secret management across platforms
-- **Google Secret Manager**: Secure secret storage for GCP workloads
 
-### **🏢 Multi-User Access Management:**
-When multiple users share control nodes, implement proper access controls:
-- Use dedicated service accounts for vault access
-- Implement role-based permissions (RBAC)
-- Store vault passwords in secure, shared locations
-- Regular password rotation policies
-
-### **💡 Best Practices:**
-- Never commit vault passwords to version control
-- Use different vault passwords for different environments
-- Implement automated vault password rotation
-- Monitor vault access and usage patterns
-
----
-
-## ✅ Summary
-
-| Command | Description |
-|----------|-------------|
-| `ansible-vault create file.yml` | Create and encrypt a new file |
-| `ansible-vault encrypt file.yml` | Encrypt an existing file |
-| `ansible-vault decrypt file.yml` | Decrypt a file |
-| `ansible-vault view file.yml` | View encrypted file |
-| `ansible-vault edit file.yml` | Edit encrypted file |
-| `ansible-vault rekey file.yml` | Change the vault password |
-| `ansible-playbook play.yml --ask-vault-pass` | Run with prompt |
-| `ansible-playbook play.yml --vault-password-file` | Run with password file |
-
----
-
-## 🧩 Advanced Lab Exercises: Vault Testing & Security
-
-### **🔒 Before You Begin - Create Backup**
-
-Always make a backup of your Vault file before testing destructive operations:
-
-```bash
-cp secret_vars.yml secret_vars.yml.bak
-```
 
 ---
 
@@ -290,6 +245,9 @@ cat secret_vars.yml.sha256
 
 ### **Step 11: Corrupt the Vault File (Intentional Tampering)**
 
+### **🔒 Before You Begin - Create Backup**
+
+Always make a backup of your Vault file before testing destructive operations:
 **Purpose:** See how Ansible detects tampering or corruption.
 
 ```bash
