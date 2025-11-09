@@ -138,18 +138,18 @@
           managed-node-1: {{ ec2var.results[0].instances[0].network_interfaces[0].private_ip_address | default('N/A') }}
           managed-node-2: {{ ec2var.results[1].instances[0].network_interfaces[0].private_ip_address | default('N/A') }}
           
-          📝 Next Steps:
-          1. Add these IPs to /etc/ansible/hosts:
+          📝 Inventory automatically created at /etc/ansible/hosts with these IPs:
              [managed_nodes]
              node1 ansible_ssh_host={{ ec2var.results[0].instances[0].network_interfaces[0].private_ip_address | default('N/A') }} ansible_ssh_user=ec2-user
              node2 ansible_ssh_host={{ ec2var.results[1].instances[0].network_interfaces[0].private_ip_address | default('N/A') }} ansible_ssh_user=ec2-user
           
-          2. Test connectivity:
-             ansible all -m ping
-          
           🔑 SSH keys have been automatically configured for passwordless access!
+          
+          ✅ Next Steps:
+          1. Test connectivity: ansible all -m ping
+          2. Start managing your infrastructure!
 
-    - name: Create sample inventory file
+    - name: Create Ansible inventory file at /etc/ansible/hosts
       copy:
         content: |
           # Ansible Inventory File
@@ -167,8 +167,10 @@
           [all:vars]
           ansible_ssh_private_key_file=/home/ec2-user/.ssh/id_rsa
           ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-        dest: /home/ec2-user/managed_nodes_inventory
+        dest: /etc/ansible/hosts
         mode: '0644'
+        backup: yes
+      become: yes
       
     - name: Final success message
       debug:
@@ -177,6 +179,11 @@
           
           📁 Files Created:
           - SSH keys: /home/ec2-user/.ssh/id_rsa (private) & id_rsa.pub (public)
-          - Sample inventory: /home/ec2-user/managed_nodes_inventory
+          - Ansible inventory: /etc/ansible/hosts (automatically configured)
           
           🚀 Ready to start managing your infrastructure with Ansible!
+          
+          💡 Quick Commands:
+          - Test connectivity: ansible all -m ping
+          - List all hosts: ansible all --list-hosts
+          - Run ad-hoc commands: ansible all -m shell -a "hostname"

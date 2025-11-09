@@ -130,7 +130,7 @@ ansible-playbook create_managed_nodes.yml
 
 📁 Files Created:
 - SSH keys: /home/ec2-user/.ssh/id_rsa (private) & id_rsa.pub (public)
-- Sample inventory: /home/ec2-user/managed_nodes_inventory
+- Ansible inventory: /etc/ansible/hosts (automatically configured)
 
 🚀 Ready to start managing your infrastructure with Ansible!
 ```
@@ -144,7 +144,7 @@ After the playbook completes successfully, verify your managed nodes:
 #### **Check the generated inventory file:**
 
 ```bash
-cat ~/managed_nodes_inventory
+sudo cat /etc/ansible/hosts
 ```
 
 **Example inventory content:**
@@ -176,9 +176,9 @@ ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ansible --version
 ```
 
-**Test connectivity to managed nodes using the generated inventory:**
+**Test connectivity to managed nodes:**
 ```bash
-ansible all -m ping -i ~/managed_nodes_inventory
+ansible all -m ping
 ```
 
 **Expected successful output:**
@@ -201,13 +201,18 @@ node2 | SUCCESS => {
 
 **Alternative: Test specific groups:**
 ```bash
-ansible managed_nodes -m ping -i ~/managed_nodes_inventory
-ansible webservers -m ping -i ~/managed_nodes_inventory
+ansible managed_nodes -m ping
+ansible webservers -m ping
 ```
 
 **Run a quick command on all managed nodes:**
 ```bash
-ansible all -m shell -a "hostname" -i ~/managed_nodes_inventory
+ansible all -m shell -a "hostname"
+```
+
+**List all hosts in inventory:**
+```bash
+ansible all --list-hosts
 ```
 
 ---
@@ -230,7 +235,7 @@ Upon successful installation, you should see:
 📋 NEXT STEPS:
 1. Configure AWS credentials: aws configure
 2. Create managed nodes: ansible-playbook create_managed_nodes.yml
-3. Test connectivity: ansible all -m ping -i managed_nodes_inventory
+3. Test connectivity: ansible all -m ping
 4. Navigate to working directory: cd ~/ansible-labs
 5. Start managing your infrastructure with Ansible!
 
@@ -244,9 +249,14 @@ Upon successful installation, you should see:
 
 📁 Files Created:
 - SSH keys: /home/ec2-user/.ssh/id_rsa (private) & id_rsa.pub (public)
-- Sample inventory: /home/ec2-user/managed_nodes_inventory
+- Ansible inventory: /etc/ansible/hosts (automatically configured)
 
 🚀 Ready to start managing your infrastructure with Ansible!
+
+💡 Quick Commands:
+- Test connectivity: ansible all -m ping
+- List all hosts: ansible all --list-hosts
+- Run ad-hoc commands: ansible all -m shell -a "hostname"
 ```
 
 ---
