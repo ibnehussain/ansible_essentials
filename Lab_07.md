@@ -218,8 +218,6 @@ You'll be prompted for the **old password** and then the **new password**.
 
 ---
 
-### **Step 11: Corrupt the Vault File (Intentional Tampering)**
-
 ### **🔒 Before You Begin - Create Backup**
 
 Always make a backup of your Vault file before testing destructive operations:
@@ -230,7 +228,7 @@ cp secret_vars.yml secret_vars.yml.bak
 
 ---
 
-### **Step 11: Corrupt the Vault File (Intentional Tampering)**
+### **Step 8️⃣: Corrupt the Vault File (Intentional Tampering)**
 
 **Purpose:** See how Ansible detects tampering or corruption.
 
@@ -260,7 +258,7 @@ AnsibleVaultError: Decryption failed (invalid checksum or data)
 
 ---
 
-### **Step 12: Test Wrong Password Behavior**
+### **Step 9️⃣: Test Wrong Password Behavior**
 
 **Purpose:** Observe how Ansible behaves with incorrect passwords.
 
@@ -283,7 +281,7 @@ ERROR! Decryption failed
 
 ---
 
-### **Step 13: Advanced Rekeying (Password Rotation)**
+### **Step 🔟: Advanced Rekeying (Password Rotation)**
 
 **Purpose:** Practice rotating (changing) the Vault password safely.
 
@@ -305,7 +303,7 @@ ansible-vault view secret_vars.yml --ask-vault-pass
 
 ---
 
-### **Step 14: Convert Plaintext Files to Vault and Back**
+### **Step 1️⃣1️⃣: Convert Plaintext Files to Vault and Back**
 
 **Purpose:** Learn to encrypt and decrypt files on demand.
 
@@ -345,12 +343,10 @@ ansible-vault decrypt plain_vars.yml
 
 | Step | Action | Key Command | Purpose |
 |------|--------|-------------|---------|
-| 10 | Inspect & checksum | `head`, `sha256sum` | File integrity verification |
-| 11 | Corrupt file test | `sed`, `ansible-vault view` | Security validation |
-| 12 | Wrong password test | `--vault-password-file` | Access control testing |
-| 13 | Advanced rekeying | `ansible-vault rekey` | Password rotation |
-| 14 | Encrypt/Decrypt plaintext | `encrypt`, `decrypt` | File conversion |
-| 15 | Multi-environment | `--vault-id` | Environment separation |
+| 8 | Corrupt file test | `sed`, `ansible-vault view` | Security validation |
+| 9 | Wrong password test | `--vault-password-file` | Access control testing |
+| 10 | Advanced rekeying | `ansible-vault rekey` | Password rotation |
+| 11 | Encrypt/Decrypt plaintext | `encrypt`, `decrypt` | File conversion |
 
 ---
 
@@ -363,21 +359,6 @@ ansible-vault decrypt plain_vars.yml
 4. **Store vault passwords** in secure key management systems
 5. **Use vault IDs** for multi-environment setups
 
-### **Cloud Integration Examples:**
-
-**AWS Secrets Manager:**
-```bash
-aws secretsmanager get-secret-value --secret-id ansible/vault-pass --query SecretString --output text > /tmp/.vault_pass.txt
-ansible-playbook vault_play.yml --vault-password-file /tmp/.vault_pass.txt
-rm /tmp/.vault_pass.txt
-```
-
-**Azure Key Vault:**
-```bash
-az keyvault secret show --vault-name MyKeyVault --name ansible-vault-pass --query value -o tsv > /tmp/.vault_pass.txt
-ansible-playbook vault_play.yml --vault-password-file /tmp/.vault_pass.txt
-rm /tmp/.vault_pass.txt
-```
 
 ---
 
