@@ -121,7 +121,57 @@ node2 ansible_ssh_host=172.31.2.229 ansible_ssh_user=ec2-user
 
 ---
 
-### **Step 7: Test Your Installation**
+### **Step 7: Configure Hostnames on Managed Nodes**
+
+Before testing connectivity, set proper hostnames on your managed nodes (if you have them configured):
+
+#### **SSH into Node 1 and set hostname:**
+
+```bash
+ssh ec2-user@<Replace-Node-1-IP>
+```
+
+**Example:**
+```bash
+ssh ec2-user@172.31.14.113
+```
+
+**Set hostname on Node 1:**
+```bash
+sudo hostnamectl set-hostname managed-node-1
+```
+
+**Exit from Node 1:**
+```bash
+exit
+```
+
+#### **SSH into Node 2 and set hostname:**
+
+```bash
+ssh ec2-user@<Replace-Node-2-IP>
+```
+
+**Example:**
+```bash
+ssh ec2-user@172.31.2.229
+```
+
+**Set hostname on Node 2:**
+```bash
+sudo hostnamectl set-hostname managed-node-2
+```
+
+**Exit from Node 2:**
+```bash
+exit
+```
+
+> **💡 Note:** Replace the IP addresses with your actual managed node IPs. This step ensures proper identification of your managed nodes in Ansible operations.
+
+---
+
+### **Step 8: Test Your Installation**
 
 **Test Ansible installation:**
 ```bash
