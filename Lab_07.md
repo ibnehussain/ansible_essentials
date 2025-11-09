@@ -255,10 +255,9 @@ ansible-vault view secret_vars_corrupt.yml --ask-vault-pass
 
 **Expected Output:**  
 You will get an error such as:
-```
-Decryption failed
-AnsibleVaultError: Decryption failed (invalid checksum or data)
-```
+
+*Decryption failed*  
+*AnsibleVaultError: Decryption failed (invalid checksum or data)*
 
 **💡 Learning:** Vault files have built-in integrity checks—any corruption invalidates the file.
 
@@ -279,9 +278,8 @@ ansible-playbook vault_play.yml --vault-password-file /tmp/wrong_pass.txt
 ```
 
 **Expected Output:**  
-```
-ERROR! Decryption failed
-```
+
+*ERROR! Decryption failed*
 
 **💡 Learning:** Vault enforces strong password-based access. No partial decryption or hints are given.
 
