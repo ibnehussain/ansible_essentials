@@ -305,10 +305,11 @@ The script installs the following components:
 
 After successful installation:
 
-1. **Complete Lab 1:** Follow the remaining steps in `Lab_01.md`
-2. **Set up managed nodes:** Configure additional EC2 instances
-3. **Explore other labs:** Progress through Labs 2-10
-4. **Build playbooks:** Start creating your own automation
+> **📖 New to Ansible?** If you're new to Ansible, we recommend following **[Lab 01](./Lab_01.md)** for a comprehensive step-by-step introduction to Ansible concepts and fundamentals.
+
+1. **Set up managed nodes:** Configure additional EC2 instances
+2. **Explore other labs:** Progress through Labs 2-10
+3. **Build playbooks:** Start creating your own automation
 
 ---
 
