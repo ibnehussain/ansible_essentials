@@ -114,6 +114,12 @@ ansible-playbook handlers_conditionals_loops.yml
 
 ## 🔍 Step 5: Verify on Target Node
 
+### **SSH to Managed Node:**
+
+```bash
+ssh user@managed-node-ip
+```
+
 ### **Direct Verification on Target:**
 
 ```bash
