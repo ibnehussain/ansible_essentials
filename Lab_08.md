@@ -117,7 +117,7 @@ ansible-playbook handlers_conditionals_loops.yml
 ### **SSH to Managed Node:**
 
 ```bash
-ssh user@managed-node-ip
+ssh ec2-user@managed-node-ip
 ```
 
 ### **Direct Verification on Target:**
@@ -132,17 +132,11 @@ cat /var/www/html/index.html
 
 **You should see:**
 
-```
-Welcome to Ansible Lab
-This is served from <hostname>
-```
+*Welcome to Ansible Lab*  
+*This is served from <hostname>*
 
 ### **Ad-hoc Commands from Control Node:**
 
-**Verify Apache service status:**
-```bash
-ansible all -m service -a "name=httpd state=started" --become
-```
 
 **Check installed packages:**
 ```bash
@@ -154,11 +148,6 @@ ansible all -m package -a "name=git state=present" --become
 ansible all -m shell -a "curl -s localhost"
 ```
 
-**Check Apache is listening on port 80:**
-```bash
-ansible all -m shell -a "netstat -tulnp | grep :80"
-```
-
 ---
 
 ## ✅ Summary
@@ -168,6 +157,41 @@ ansible all -m shell -a "netstat -tulnp | grep :80"
 | **Handlers**     | React to changes, usually for restarting/reloading services. |
 | **Conditionals** | Control when a task should or shouldn’t run.                 |
 | **Loops**        | Execute the same task multiple times with different items.   |
+
+---
+
+## 🎓 **What You Have Learned**
+
+Congratulations! In this lab, you have successfully mastered several key Ansible concepts:
+
+### **🔔 Handlers Mastery:**
+- Learned how handlers respond only to task changes
+- Implemented automatic service restarts when configurations change
+- Used `notify` to trigger handlers efficiently
+
+### **❓ Conditionals Expertise:**
+- Applied OS-specific conditions with `when` statements
+- Used Ansible facts to control task execution
+- Implemented smart deployment logic based on system properties
+
+### **🔄 Loops Proficiency:**
+- Executed repetitive tasks efficiently using `loop`
+- Installed multiple packages without writing duplicate tasks
+- Streamlined playbook structure with iteration
+
+### **🛠️ Practical Skills Gained:**
+- Set up a complete web server environment
+- Deployed dynamic web content using templates
+- Performed comprehensive verification using both direct and ad-hoc commands
+- Combined multiple Ansible concepts in a real-world scenario
+
+### **🚀 Production-Ready Knowledge:**
+- Understanding of when and how to use handlers in production
+- Conditional deployment strategies for multi-environment setups
+- Efficient task management through loops and iteration
+- Verification techniques for ensuring deployment success
+
+**You are now equipped to build sophisticated, efficient, and maintainable Ansible playbooks!** 🎉
 
 ---
 
