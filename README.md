@@ -75,11 +75,14 @@ curl -sSL https://raw.githubusercontent.com/ibnehussain/ansible_essentials/main/
 - Integrate with cloud secret management services (AWS, Azure)
 - **Topics**: Encryption, vault operations, security testing, multi-environment setup, cloud integration
 
-### **[Lab 08 — Handlers and Notifications](./Lab_08.md)** ⚠️
-- Implement service restart automation
-- Create handler groups and dependencies
-- Build robust notification systems
-- **Topics**: Handlers, notifications, service management, error handling
+### **🧪 [Lab 08 — Handlers + Conditionals + Loops](./Lab_08.md)**
+- **Enhanced with**: Comprehensive verification methods, ad-hoc command examples, learning outcomes
+- Master Ansible handlers for event-driven automation and service management
+- Implement conditionals for OS-specific and fact-based task execution
+- Use loops for efficient package installation and repetitive tasks
+- Practice both direct verification and ad-hoc command validation
+- Learn production-ready patterns for service restart automation
+- **Topics**: Handlers, conditionals, loops, service management, verification techniques
 
 ### **[Lab 09 — Error Handling and Debugging](./Lab_09.md)** ⚠️
 - Master error handling strategies
@@ -93,7 +96,7 @@ curl -sSL https://raw.githubusercontent.com/ibnehussain/ansible_essentials/main/
 - Build complete application stacks
 - **Topics**: Roles, modularity, reusability, best practices
 
-> **📝 Note**: Labs 8-10 are currently being improvised and enhanced. Content may be updated as these labs are refined and expanded.
+> **📝 Note**: Lab 08 is completed with comprehensive content. Labs 9-10 are currently being improved and enhanced. Content may be updated as these labs are refined and expanded.
 
 ## 🛠️ Automation Scripts
 
@@ -167,10 +170,10 @@ curl -sSL https://raw.githubusercontent.com/ibnehussain/ansible_essentials/main/
 - **Lab 6**: Modular design and task inclusion
 - **Lab 7**: Secure secrets management with Ansible Vault
 
-### **Phase 3: Production Ready** (Labs 8-10) ⚠️ *In Development*
-- **Lab 8**: Event-driven automation with handlers
-- **Lab 9**: Enterprise debugging and error handling
-- **Lab 10**: Role-based architecture and scalability
+### **Phase 3: Production Ready** (Labs 8-10)
+- **Lab 8**: ✅ **Completed** - Event-driven automation with handlers, conditionals, and loops
+- **Lab 9**: ⚠️ *In Development* - Enterprise debugging and error handling
+- **Lab 10**: ⚠️ *In Development* - Role-based architecture and scalability
 
 ## 🆘 Comprehensive Support
 
@@ -193,6 +196,6 @@ Each enhanced lab includes:
 
 ---
 
-**Last Updated**: November 9, 2025  
-**Version**: 3.0 - Enhanced with automation, visual improvements, and comprehensive documentation  
+**Last Updated**: November 10, 2025  
+**Version**: 3.1 - Lab 08 completed with handlers, conditionals, loops, and comprehensive verification  
 **Repository**: [ansible_essentials](https://github.com/ibnehussain/ansible_essentials)
