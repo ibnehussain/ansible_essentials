@@ -65,7 +65,13 @@ roles/webserver/
 
 ### **Step 3: Define Role Variables**
 
-**File:** `roles/webserver/vars/main.yml`
+**Create the variables file:**
+
+```bash
+vi roles/webserver/vars/main.yml
+```
+
+**File content for:** `roles/webserver/vars/main.yml`
 
 ```yaml
 ---
@@ -78,7 +84,13 @@ web_page: index.html
 
 ### **Step 4: Create HTML Content**
 
-**File:** `roles/webserver/files/index.html`
+**Create the HTML file:**
+
+```bash
+vi roles/webserver/files/index.html
+```
+
+**File content for:** `roles/webserver/files/index.html`
 
 ```html
 <html>
@@ -92,7 +104,13 @@ web_page: index.html
 
 ### **Step 5: Define Role Tasks**
 
-**File:** `roles/webserver/tasks/main.yml`
+**Create the tasks file:**
+
+```bash
+vi roles/webserver/tasks/main.yml
+```
+
+**File content for:** `roles/webserver/tasks/main.yml`
 
 ```yaml
 ---
@@ -120,7 +138,13 @@ web_page: index.html
 
 ### **Step 6: Configure Handlers**
 
-**File:** `roles/webserver/handlers/main.yml`
+**Create the handlers file:**
+
+```bash
+vi roles/webserver/handlers/main.yml
+```
+
+**File content for:** `roles/webserver/handlers/main.yml`
 
 ```yaml
 ---
@@ -138,7 +162,13 @@ web_page: index.html
 
 ### **Step 7: Create Playbook**
 
-**File:** `site.yml`
+**Create the main playbook file:**
+
+```bash
+vi site.yml
+```
+
+**File content for:** `site.yml`
 
 ```yaml
 ---
