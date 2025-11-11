@@ -20,7 +20,7 @@
 
 ---
 
-## � **Lab Setup**
+## 🧰 **Lab Setup**
 
 ### **Step 1: Create Project Directory**
 
@@ -186,7 +186,6 @@ Open: `http://<your_target_ip>`
 
 ## 🧠 **Key Takeaways**
 
-| Topic                  | Key Idea                                                |
 | Topic                  | Key Concept                                             |
 | ---------------------- | ------------------------------------------------------- |
 | `ansible.builtin.*`    | Modern module naming standard (since Ansible 2.10)    |
