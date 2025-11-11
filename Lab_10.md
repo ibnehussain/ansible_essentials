@@ -63,6 +63,12 @@ roles/webserver/
 
 ## ⚙️ **Role Implementation**
 
+> **📝 Important Note:** When creating YAML files with `vi`, the `ansible-galaxy init` command automatically generates template files with `---` delimiters and comment headers (like `# tasks file for webserver`). You can either:
+> - **Keep them** (recommended for clarity)
+> - **Remove them** if you prefer cleaner files
+> 
+> The examples below show the complete file content including these elements.
+
 ### **Step 3: Define Role Variables**
 
 **Create the variables file:**
@@ -72,6 +78,8 @@ vi roles/webserver/vars/main.yml
 ```
 
 **File content for:** `roles/webserver/vars/main.yml`
+
+> **💡 YAML Tip:** The `---` at the beginning is optional for single-document YAML files but is good practice for clarity.
 
 ```yaml
 ---
@@ -187,7 +195,7 @@ vi site.yml
 ### **Step 8: Run the Playbook**
 
 ```bash
-ansible-playbook -i inventory site.yml
+ansible-playbook site.yml
 ```
 
 ---
