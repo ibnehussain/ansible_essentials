@@ -181,7 +181,7 @@ vi site.yml
 ```yaml
 ---
 - name: Deploy Apache Web Server using Role
-  hosts: web
+  hosts: webservers
   become: yes
 
   roles:
@@ -202,7 +202,7 @@ ansible-playbook site.yml
 
 ## 🔍 **Verify Deployment**
 
-### **Step 9: Test the Web Server**
+### **Step 9: Test the Web Server on Managed Node**
 
 **Check service status:**
 
@@ -212,11 +212,11 @@ sudo systemctl status httpd
 
 **Test in browser:**
 
-Open: `http://<your_target_ip>`
+Open: `http://<managed_node_ip>`
 
 **Expected Output:**
 
-*Welcome to Apache Webserver (Managed by Ansible Role)*
+*Welcome to Apache Webserver*
 
 ---
 
