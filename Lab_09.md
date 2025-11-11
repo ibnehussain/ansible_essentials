@@ -24,22 +24,15 @@ Create a new working directory:
 
 ```bash
 mkdir ansible-jinja2-lab
+```
+
+```bash
 cd ansible-jinja2-lab
 ```
 
 ---
 
-## 🧰 3. **Create Inventory File**
-
-Create a simple inventory for localhost:
-
-```bash
-echo "localhost ansible_connection=local" > inventory
-```
-
----
-
-## 🧾 4. **Create the Jinja2 Template**
+## 🧾 3. **Create the Jinja2 Template**
 
 Create the template directory first:
 
@@ -71,7 +64,7 @@ EOF
 
 ---
 
-## 🧾 5. **Create the Playbook**
+## 🧾 4. **Create the Playbook**
 
 **File:** `playbook.yml`
 
@@ -103,7 +96,7 @@ EOF
 
 ---
 
-## ▶️ 6. **Run the Playbook**
+## ▶️ 5. **Run the Playbook**
 
 ```bash
 ansible-playbook playbook.yml
@@ -111,7 +104,7 @@ ansible-playbook playbook.yml
 
 ---
 
-## 🧩 7. **Expected Output**
+## 🧩 6. **Expected Output**
 
 **Console Output:**
 
@@ -140,7 +133,7 @@ cat /tmp/welcome_message.txt
 
 ---
 
-## 🔄 8. **Test the Dynamic Nature**
+## 🔄 7. **Test the Dynamic Nature**
 
 Change variable values in playbook:
 
@@ -163,13 +156,14 @@ ansible-playbook playbook.yml
 
 ---
 
-## 🔁 9. **Bonus: Add a Loop**
+## 🔁 8. **Bonus: Add a Loop**
 
 Edit the same template to include a list of applications.
 
 **Updated `templates/welcome.j2`**
 
-```jinja2
+```bash
+cat > templates/welcome.j2 << 'EOF'
 Hello {{ user_name }} 👋
 Welcome to {{ environment }} environment.
 
@@ -181,6 +175,7 @@ Applications Deployed:
 {% else %}
 No applications listed.
 {% endif %}
+EOF
 ```
 
 **Update Playbook Variables:**
@@ -199,7 +194,7 @@ Run again — now it lists all apps dynamically.
 
 ---
 
-## 🧠 10. **Key Takeaways**
+## 🧠 9. **Key Takeaways**
 
 | Feature         | Example                   | Description                         |
 | --------------- | ------------------------- | ----------------------------------- |
