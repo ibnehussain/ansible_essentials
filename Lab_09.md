@@ -84,13 +84,9 @@ cat > playbook.yml << 'EOF'
         src: templates/welcome.j2
         dest: /tmp/welcome_message.txt
 
-    - name: Show the rendered output
-      command: cat /tmp/welcome_message.txt
-      register: message_output
-
-    - name: Display file content on console
+    - name: Display rendered file content
       debug:
-        var: message_output.stdout
+        msg: "{{ lookup('file', '/tmp/welcome_message.txt') }}"
 EOF
 ```
 
@@ -109,26 +105,32 @@ ansible-playbook playbook.yml
 **Console Output:**
 
 ```
-TASK [Display file content on console] ****************************************
+TASK [Display rendered file content] ******************************************
 ok: [localhost] => {
-    "message_output.stdout": "Hello Azhar 👋
-
-Welcome to the Development environment.
-This message was generated on 2025-11-11.
-
-Server Details:
-- Hostname: localhost
-- OS: Debian
-- IP Address: 127.0.0.1
-
-🧪  Safe to test and experiment here."
+    "msg": "Hello Azhar 👋\n\nWelcome to the Development environment.\nThis message was generated on 2025-11-11.\n\nServer Details:\n- Hostname: Control-Node\n- OS: RedHat\n- IP Address: 172.31.25.104\n\n🧪  Safe to test and experiment here."
 }
 ```
 
 **Rendered File:**
 
-```
+```bash
 cat /tmp/welcome_message.txt
+```
+
+*Expected rendered content:*
+
+```
+Hello Azhar 👋
+
+Welcome to the Development environment.
+This message was generated on 2025-11-11.
+
+Server Details:
+- Hostname: Control-Node
+- OS: RedHat
+- IP Address: 172.31.25.104
+
+🧪  Safe to test and experiment here.
 ```
 
 ---
